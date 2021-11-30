@@ -6,7 +6,11 @@ import org.junit.runner.Runner;
 import org.junit.runner.manipulation.InvalidOrderingException;
 import org.junit.runner.manipulation.Ordering;
 
-/** @since 4.13 */
+/** @since 4.13
+ * Including chaning on Ordering on the constructor so the request can be order by different
+ * order defined in the code
+ *
+ * */
 public class OrderingRequest extends MemoizingRequest {
     private final Request request;
     private final Ordering ordering;
