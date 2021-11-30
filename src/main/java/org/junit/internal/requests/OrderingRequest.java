@@ -11,11 +11,24 @@ public class OrderingRequest extends MemoizingRequest {
     private final Request request;
     private final Ordering ordering;
 
-    public OrderingRequest(Request request, Ordering ordering) {
-        this.request = request;
-        this.ordering = ordering;
-    }
+    public OrderingRequest(final Request request, final Ordering ordering) {
 
+        this.ordering = ordering;
+        this.request = new Request() {
+            @Override
+            public Runner getRunner() {
+                try {
+                    Runner runner = request.getRunner();
+                    ordering.apply(runner);
+                    return runner;
+                } catch (InvalidOrderingException e) {
+                    return new ErrorReportingRunner(ordering.getClass(), e);
+                }
+            }
+
+
+        };
+    }
     @Override
     protected Runner createRunner() {
         Runner runner = request.getRunner();
