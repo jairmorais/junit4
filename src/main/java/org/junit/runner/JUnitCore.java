@@ -34,7 +34,12 @@ public class JUnitCore {
      */
     public static void main(String... args) {
         Result result = new JUnitCore().runMain(new RealSystem(), args);
-        System.exit(result.wasSuccessful() ? 0 : 1);
+
+        boolean wasSuccessful = Boolean.parseBoolean(String.valueOf(result.wasSuccessful()));
+
+        int IntWasSuccessful = (wasSuccessful) ? 1 : 0;
+
+        System.exit( IntWasSuccessful);
     }
 
     /**
@@ -67,11 +72,13 @@ public class JUnitCore {
      * @param args from main()
      */
     Result runMain(JUnitSystem system, String... args) {
+
         system.out().println("JUnit version " + Version.id());
 
         JUnitCommandLineParseResult jUnitCommandLineParseResult = JUnitCommandLineParseResult.parse(args);
 
         RunListener listener = new TextListener(system);
+
         addListener(listener);
 
         return run(jUnitCommandLineParseResult.createRequest(defaultComputer()));
@@ -81,6 +88,7 @@ public class JUnitCore {
      * @return the version number of this release
      */
     public String getVersion() {
+
         return Version.id();
     }
 
@@ -91,6 +99,7 @@ public class JUnitCore {
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
     public Result run(Class<?>... classes) {
+
         return run(defaultComputer(), classes);
     }
 
@@ -102,6 +111,7 @@ public class JUnitCore {
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
     public Result run(Computer computer, Class<?>... classes) {
+
         return run(Request.classes(computer, classes));
     }
 
@@ -112,6 +122,7 @@ public class JUnitCore {
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
     public Result run(Request request) {
+
         return run(request.getRunner());
     }
 
@@ -134,10 +145,14 @@ public class JUnitCore {
         notifier.addFirstListener(listener);
         try {
             notifier.fireTestRunStarted(runner.getDescription());
+
             runner.run(notifier);
-            notifier.fireTestRunFinished(result);
         } finally {
+
             removeListener(listener);
+
+            notifier.fireTestRunFinished(result);
+
         }
         return result;
     }
@@ -149,6 +164,7 @@ public class JUnitCore {
      * @see org.junit.runner.notification.RunListener
      */
     public void addListener(RunListener listener) {
+
         notifier.addListener(listener);
     }
 
@@ -158,10 +174,12 @@ public class JUnitCore {
      * @param listener the listener to remove
      */
     public void removeListener(RunListener listener) {
+
         notifier.removeListener(listener);
     }
 
     static Computer defaultComputer() {
+
         return new Computer();
     }
 }

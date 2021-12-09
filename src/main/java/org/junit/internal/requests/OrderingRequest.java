@@ -7,7 +7,7 @@ import org.junit.runner.manipulation.InvalidOrderingException;
 import org.junit.runner.manipulation.Ordering;
 
 /** @since 4.13
- * Including chaning on Ordering on the constructor so the request can be order by different
+ * Including changing on Ordering on the constructor so the request can be order by different
  * order defined in the code
  *
  * */
@@ -15,18 +15,19 @@ public class OrderingRequest extends MemoizingRequest {
     private final Request request;
     private final Ordering ordering;
 
-    public OrderingRequest(final Request request, final Ordering ordering) {
-
+    public OrderingRequest( Request request,  Ordering ordering) {
+        final Request  RequestFinal =  request;
+        final Ordering orderingFinal = ordering;
         this.ordering = ordering;
         this.request = new Request() {
             @Override
             public Runner getRunner() {
                 try {
-                    Runner runner = request.getRunner();
-                    ordering.apply(runner);
+                    Runner runner = RequestFinal.getRunner();
+                    orderingFinal.apply(runner);
                     return runner;
                 } catch (InvalidOrderingException e) {
-                    return new ErrorReportingRunner(ordering.getClass(), e);
+                    return new ErrorReportingRunner(orderingFinal.getClass(), e);
                 }
             }
 

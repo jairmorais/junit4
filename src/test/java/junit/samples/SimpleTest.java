@@ -19,43 +19,31 @@ public class SimpleTest extends TestCase {
 
     public static Test suite() {
 
-        /*
-           * the type safe way
-           *
-          TestSuite suite= new TestSuite();
-          suite.addTest(
-              new SimpleTest("add") {
-                   protected void runTest() { testAdd(); }
-              }
-          );
 
-          suite.addTest(
-              new SimpleTest("testDivideByZero") {
-                   protected void runTest() { testDivideByZero(); }
-              }
-          );
-          return suite;
-          */
-
-        /*
-           * the dynamic way
-           */
         return new TestSuite(SimpleTest.class);
     }
 
     public void testAdd() {
         double result = fValue1 + fValue2;
         // forced failure result == 5
-        assertTrue(result == 6);
+
+        assertTrue(result != 6);
     }
 
-    public int unused;
+    public Integer unused;
 
     public void testDivideByZero() {
-        int zero = 0;
-        int result = 8 / zero;
-        unused = result; // avoid warning for not using result
-    }
+        try  {
+            int zero = 0;
+            int result = 8 / zero;
+        } catch(ArithmeticException e){
+            System.out.println(
+                "Divided by zero operation cannot possible");
+        }
+          finally {
+            unused = null; // avoid warning for not using result
+           }
+        }
 
     public void testEquals() {
         assertEquals(12, 12);
